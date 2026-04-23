@@ -9,8 +9,7 @@ import { PDReport } from './ReportCard'
 
 export default function ContentArea({rdate} : {rdate: string}) {
     
-    /* POPULATE ISLAND STATES */
-    const [date, setDate] = useState<Date>(new Date(rdate)) // Sets the default date to the most recently available
+    const [date, setDate] = useState<Date>(new Date(rdate)) 
     const [seeNumDays, setSeeNumDays] = useState<number>(1) 
     const [reportArr, setReportArr] = useState<PDReport[]>([])
     const [sortState, setSortState] = useState<string>("descending")
