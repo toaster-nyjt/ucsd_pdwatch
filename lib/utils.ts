@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { supabase } from './supabase';
 import { oldestDate } from './constants';
 import { PDReport } from '@/components/ReportCard';
+import { locationCoords } from './locationCoords';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -34,19 +35,25 @@ export async function getReportObjs(
 
     const { data } = await supabase
         .from('incidents')
-        .select('category, location, date, time, summary, disposition')
+        .select('category, location, date, time, summary, disposition, id')
         .gte('date', formatEndDate)
         .lte('date', formatStartDate);
 
     const filteredData = data!.map(
-        ({ summary, time, date, disposition, location, category }) => ({
-            summary: summary ?? 'None',
-            disposition: disposition ?? 'None given',
-            location: location ?? 'None given',
-            category: category ?? 'None given',
-            time: time ?? '00:00:00',
-            date: date ?? '1970/01/01',
-        })
+        ({ summary, time, date, disposition, location, category, id }) => {
+            const coords = locationCoords[location ?? ''] ?? null;
+            return {
+                id,
+                summary: summary ?? 'None',
+                disposition: disposition ?? 'None given',
+                location: location ?? 'None given',
+                category: category ?? 'None given',
+                time: time ?? '00:00:00',
+                date: date ?? '1970/01/01',
+                lat: coords?.lat ?? 32.8801,
+                lng: coords?.lng ?? -117.2340,
+            };
+        }
     );
 
     console.log(`Most Recent ${formatStartDate}`);

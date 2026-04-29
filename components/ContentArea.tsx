@@ -5,6 +5,86 @@ import ReportGrid from './ReportGrid';
 import { useState, useEffect, useMemo } from 'react';
 import { getReportObjs, sortReports, filterReports } from '@/lib/utils';
 import { PDReport } from './ReportCard';
+import { MeridianWrapper, MeridianOverview, MeridianItem, ViewOptions, FetchedAttributeValueType } from 'meridian-ui';
+import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
+import { odi } from '@/lib/odi';
+
+const styledMap = {
+    type: 'map',
+    view: (options: ViewOptions) => {
+        console.log('[styledMap] items:', options.items.length);
+        console.log('[styledMap] first item internalAttributes:', JSON.stringify(options.items[0]?.internalAttributes));
+        console.log('[styledMap] apiKey:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY);
+        const coords = options.items.map(item => {
+            const latAttr = item.internalAttributes?.find(
+                a => a && 'path' in a && (a as FetchedAttributeValueType).path === '.lat'
+            ) as FetchedAttributeValueType | undefined;
+            const lngAttr = item.internalAttributes?.find(
+                a => a && 'path' in a && (a as FetchedAttributeValueType).path === '.lng'
+            ) as FetchedAttributeValueType | undefined;
+            const lat = parseFloat(String(latAttr?.value ?? '0'));
+            const lng = parseFloat(String(lngAttr?.value ?? '0'));
+            return lat && lng ? { lat, lng } : null;
+        });
+
+        console.log('[styledMap] coords sample:', coords.slice(0, 3));
+        const validCoords = coords.filter(Boolean) as { lat: number; lng: number }[];
+        console.log('[styledMap] validCoords:', validCoords.length, '/', coords.length);
+        if (validCoords.length === 0) return <p>No positions found</p>;
+
+        const avgLat = validCoords.reduce((s, p) => s + p.lat, 0) / validCoords.length;
+        const avgLng = validCoords.reduce((s, p) => s + p.lng, 0) / validCoords.length;
+
+        const detailToOpen = options.overview.detailViews?.find(
+            d => typeof d === 'object' && (d as any).openFrom?.includes('item')
+        );
+
+        return (
+            <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? ''}>
+                <Map
+                    mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID ?? 'DEMO_MAP_ID'}
+                    style={{ width: '100%', height: '90vh' }}
+                    defaultCenter={{ lat: avgLat, lng: avgLng }}
+                    defaultZoom={14}
+                >
+                    {options.items.map((item, index) => {
+                        const pos = coords[index];
+                        if (!pos) return null;
+                        return (
+                            <AdvancedMarker key={`${item.itemId}-${index}`} position={pos}>
+                                <div className={`w-fit max-w-[500px] bg-white border border-gray-400 rounded-2xl shadow-md ${detailToOpen ? 'hover:scale-110 active:scale-100 transition' : ''}`}>
+                                    <MeridianItem item={item} options={options} index={index} itemView={options.overview.itemView} />
+                                </div>
+                            </AdvancedMarker>
+                        );
+                    })}
+                </Map>
+            </APIProvider>
+        );
+    },
+    defaultSpec: { itemView: { type: 'pin' } },
+};
+
+const styledGrid = {
+    type: 'grid',
+    view: (options: ViewOptions) => (
+        <div className="overview-basic-grid">
+            <div
+                className={`overview-basic-container ${options.overview.className ?? ''}`}
+                style={options.overview.style}
+            >
+                {options.items.map((item, index) => (
+                    <div key={index} className="overview-basic-item">
+                        <MeridianItem options={options} item={item} itemView={options.overview.itemView} index={index} className={options.overview.itemClassName} style={options.overview.itemStyle} />
+                    </div>
+                ))}
+            </div>
+        </div>
+    ),
+    defaultSpec: { itemView: { type: 'vertical' } },
+};
+
+const customOverviewTypes = [styledMap, styledGrid];
 
 export default function ContentArea({ rdate }: { rdate: string }) {
     const [date, setDate] = useState<Date>(new Date(rdate));
@@ -55,7 +135,18 @@ export default function ContentArea({ rdate }: { rdate: string }) {
                 ) : sortedArr.length == 0 ? (
                     <p>No reports found</p>
                 ) : (
-                    <ReportGrid reportArr={sortedArr} />
+
+                    // <ReportGrid reportArr={sortedArr} />
+
+                    <MeridianWrapper odi={odi} data={sortedArr}
+                        customOverviewTypes={customOverviewTypes}
+                        onOpenDetailNewPage={()=>{}}
+                        onOpenOverviewNewPage={()=>{}}
+                    >                        
+                        
+                        <MeridianOverview/>
+                    </MeridianWrapper>
+                        
                 )}
             </div>
         </div>

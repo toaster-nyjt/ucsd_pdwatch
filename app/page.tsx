@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import ContentArea from '@/components/ContentArea';
 import { getMostRecentDate } from '@/lib/constants';
+import 'meridian-ui/styles';
 
 export default async function Page() {
     const date = await getMostRecentDate();

@@ -1,10 +1,13 @@
 type PDReport = {
+    id: string;
     category: string;
     location: string;
     date: string;
     time: string;
     summary: string;
     disposition: string;
+    lat: number;
+    lng: number;
 };
 
 export type { PDReport };
