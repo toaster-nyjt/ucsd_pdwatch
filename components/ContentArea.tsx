@@ -52,7 +52,7 @@ const styledMap = {
                         if (!pos) return null;
                         return (
                             <AdvancedMarker key={`${item.itemId}-${index}`} position={pos}>
-                                <div className={`w-fit max-w-[500px] bg-white border border-gray-400 rounded-2xl shadow-md ${detailToOpen ? 'hover:scale-110 active:scale-100 transition' : ''}`}>
+                                <div className={`w-fit max-w-125 bg-white border border-gray-400 rounded-2xl shadow-md ${detailToOpen ? 'hover:scale-110 active:scale-100 transition' : ''}`}>
                                     <MeridianItem item={item} options={options} index={index} itemView={options.overview.itemView} />
                                 </div>
                             </AdvancedMarker>
