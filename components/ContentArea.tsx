@@ -9,58 +9,6 @@ import { MeridianWrapper, MeridianOverview, MeridianItem, ViewOptions, FetchedAt
 import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 import { odi } from '@/lib/odi';
 
-const styledMap = {
-    type: 'map',
-    view: (options: ViewOptions) => {
-        const coords = options.items.map(item => {
-            const latAttr = item.internalAttributes?.find(
-                a => a && 'path' in a && (a as FetchedAttributeValueType).path === '.lat'
-            ) as FetchedAttributeValueType | undefined;
-            const lngAttr = item.internalAttributes?.find(
-                a => a && 'path' in a && (a as FetchedAttributeValueType).path === '.lng'
-            ) as FetchedAttributeValueType | undefined;
-            const lat = parseFloat(String(latAttr?.value ?? '0'));
-            const lng = parseFloat(String(lngAttr?.value ?? '0'));
-            return lat && lng ? { lat, lng } : null;
-        });
-
-        const validCoords = coords.filter(Boolean) as { lat: number; lng: number }[];
-        if (validCoords.length === 0) return <p>No positions found</p>;
-
-        const avgLat = validCoords.reduce((s, p) => s + p.lat, 0) / validCoords.length;
-        const avgLng = validCoords.reduce((s, p) => s + p.lng, 0) / validCoords.length;
-
-        const detailToOpen = options.overview.detailViews?.find(
-            d => typeof d === 'object' && (d as any).openFrom?.includes('item')
-        );
-
-        return (
-            <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? ''}>
-                <Map
-                    mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID ?? 'DEMO_MAP_ID'}
-                    style={{ width: '100%', height: '90vh' }}
-                    defaultCenter={{ lat: avgLat, lng: avgLng }}
-                    defaultZoom={14}
-                >
-                    {options.items.map((item, index) => {
-                        const pos = coords[index];
-                        if (!pos) return null;
-                        return (
-                            <AdvancedMarker key={`${item.itemId}-${index}`} position={pos}>
-                                <div className={`w-fit max-w-125 bg-white border border-gray-400 rounded-2xl shadow-md ${detailToOpen ? 'hover:scale-110 active:scale-100 transition' : ''}`}>
-                                    <MeridianItem item={item} options={options} index={index} itemView={options.overview.itemView} />
-                                </div>
-                            </AdvancedMarker>
-                        );
-                    })}
-                </Map>
-            </APIProvider>
-        );
-    },
-    defaultSpec: { itemView: { type: 'pin' } },
-};
-
-const customOverviewTypes = [styledMap];
 
 export default function ContentArea({ rdate }: { rdate: string }) {
     const [date, setDate] = useState<Date>(new Date(rdate));
@@ -114,10 +62,7 @@ export default function ContentArea({ rdate }: { rdate: string }) {
 
                     // <ReportGrid reportArr={sortedArr} />
 
-                    <MeridianWrapper odi={odi} data={sortedArr}
-                        customOverviewTypes={customOverviewTypes}                       
-                    >                        
-                        
+                    <MeridianWrapper odi={odi} data={sortedArr}>                        
                         <MeridianOverview/>
                     </MeridianWrapper>
                         

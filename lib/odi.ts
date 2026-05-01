@@ -5,7 +5,7 @@ export const odi : ODI = {
         id: 'incidentBinding',
         binding: {
             itemId: '.id',
-              internalAttributes: [
+            internalAttributes: [
                 { id: 'lat', value: '.lat' },
                 { id: 'lng', value: '.lng' },
             ],
@@ -25,6 +25,8 @@ export const odi : ODI = {
         type: 'grid',
         itemView: { type: 'vertical' },
         hiddenAttributes: ['spec'],
+        googleMapsAPIKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? '',
+        googleMapsAPIId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID ?? 'DEMO_MAP_ID',
         className: "!flex !flex-wrap !justify-center !gap-x-2.5 !gap-y-2.25 !rounded-[35px] !px-2 !py-4 !drop-shadow-2xl",
         style: {
                 boxShadow:
