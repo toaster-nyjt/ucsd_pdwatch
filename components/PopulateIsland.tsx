@@ -44,8 +44,8 @@ export default function PopulateIsland({
                     <SelectContent>
                         <SelectItem value="1">Previous Day</SelectItem>
                         <SelectItem value="7">Previous Week</SelectItem>
-                        <SelectItem value="30">Previous Month</SelectItem>
-                        <SelectItem value="-1">All Time</SelectItem>
+                        {/* <SelectItem value="30">Previous Month</SelectItem> */}
+                        {/* <SelectItem value="-1">All Time</SelectItem> */}
                     </SelectContent>
                 </Select>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useODI } from 'meridian-ui';
 import {
     Select,
     SelectContent,
@@ -8,6 +9,18 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+
+const typeIdMap = {
+    'card': 0,
+    'map' : 1,
+    'timeline' : 2
+}
+
+const IdTypeMap = {
+    '0': 'card',
+    '1': 'map',
+    '2': 'timeline'
+}
 
 export default function ViewIsland({
     setSortState,
@@ -18,9 +31,18 @@ export default function ViewIsland({
     searchState: string;
     setSearch: (arg0: string) => void;
 }) {
-    const [activeLayout, setActiveLayout] = useState<
-        'card' | 'timeline' | 'map'
-    >('card');
+    
+    const { activeOverview, setActiveOverview } = useODI();
+
+    const activeLayout = IdTypeMap[activeOverview as keyof typeof IdTypeMap];
+
+    // useEffect(()=>{
+    //     setActiveOverview(`${typeIdMap[activeLayout]}`);
+    // }, [activeLayout]);
+   
+    const handleView = (view : 'card'|'timeline'|'map') => {
+        setActiveOverview(`${typeIdMap[view]}`);
+    };
 
     return (
         <div
@@ -77,7 +99,7 @@ export default function ViewIsland({
 
                 {/* Card View button */}
                 <button
-                    onClick={() => setActiveLayout('card')}
+                    onClick={() => handleView('card')}
                     className={`flex items-center justify-between rounded-[10px] px-4.5 py-1.75 transition-all ${
                         activeLayout === 'card'
                             ? 'bg-white shadow-md'
@@ -119,7 +141,7 @@ export default function ViewIsland({
 
                 {/* Timeline View button */}
                 <button
-                    onClick={() => setActiveLayout('timeline')}
+                    onClick={() => handleView('timeline')}
                     className={`flex items-center justify-between rounded-[10px] px-4.5 py-1.75 transition-all ${
                         activeLayout === 'timeline'
                             ? 'bg-white shadow-md'
@@ -129,7 +151,7 @@ export default function ViewIsland({
                     <span
                         className={`text-[14px] ${activeLayout === 'timeline' ? 'text-black' : 'text-black/50'}`}
                     >
-                        Timeline
+                        Timetable
                     </span>
                     {/* PASTE TIMELINE VIEW SVG HERE */}
                     <svg
@@ -151,7 +173,7 @@ export default function ViewIsland({
 
                 {/* Map View button */}
                 <button
-                    onClick={() => setActiveLayout('map')}
+                    onClick={() => handleView('map')}
                     className={`flex items-center justify-between rounded-[10px] py-1.75 pr-6 pl-4.5 transition-all ${
                         activeLayout === 'map'
                             ? 'bg-white shadow-md'

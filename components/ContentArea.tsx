@@ -5,12 +5,12 @@ import ReportGrid from './ReportGrid';
 import { useState, useEffect, useMemo } from 'react';
 import { getReportObjs, sortReports, filterReports } from '@/lib/utils';
 import { PDReport } from './ReportCard';
-import { MeridianWrapper, MeridianOverview, MeridianItem, ViewOptions, FetchedAttributeValueType } from 'meridian-ui';
-import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
+import { MeridianWrapper, MeridianOverview } from 'meridian-ui';
 import { odi } from '@/lib/odi';
 
 
 export default function ContentArea({ rdate }: { rdate: string }) {
+
     const [date, setDate] = useState<Date>(new Date(rdate));
     const [seeNumDays, setSeeNumDays] = useState<number>(1);
     const [reportArr, setReportArr] = useState<PDReport[]>([]);
@@ -37,7 +37,7 @@ export default function ContentArea({ rdate }: { rdate: string }) {
     const numEntries = sortedArr.length;
 
     return (
-        <div className="flex h-full w-full flex-row justify-center gap-2.5 overflow-hidden px-2.5">
+        <div className="flex h-full w-full flex-row justify-around gap-2.5 overflow-hidden px-2.5">
             {/* Left: Menu column */}
             <div className="no-scrollbar flex max-h-300 max-w-75.75 min-w-52.25 basis-1/5 flex-col overflow-y-auto pt-5 pb-5">
                 <Menu
