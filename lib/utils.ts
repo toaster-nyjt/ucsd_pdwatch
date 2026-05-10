@@ -112,6 +112,28 @@ export function sortReports(
     return stampedArr.map(({ tStamp, ...originalObj }) => originalObj);
 }
 
+export function formatReports(reportArr: PDReport[]): PDReport[] {
+    return reportArr.map((report) => ({
+        ...report,
+        date:
+            report.date !== '1970/01/01'
+                ? new Date(report.date).toLocaleDateString('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                  })
+                : 'N/A',
+        time:
+            report.time !== '00:00:00'
+                ? new Intl.DateTimeFormat('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                  }).format(new Date(`1970-01-01T${report.time}`))
+                : 'N/A',
+    }));
+}
+
 export function filterReports(
     search: string,
     reportArr: PDReport[]

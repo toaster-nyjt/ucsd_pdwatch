@@ -26,7 +26,7 @@ export const odi : ODI = {
         bindingId: 'incidentBinding',
         type: 'grid',
         itemView: { type: 'vertical' },
-        hiddenAttributes: ['spec'],
+        hiddenAttributes: ['spec', 'direction'],
         className: "!flex !flex-wrap justify-center! !gap-x-2.5 !gap-y-2.25 !rounded-[25px] !px-12 !py-12 !drop-shadow-2xl max-w-[100vw]!",
         style: {
                 boxShadow:
@@ -48,7 +48,7 @@ export const odi : ODI = {
         type: 'map',
         itemView: { type: 'pin'},
         shownAttributes: 'all',
-        hiddenAttributes: ['date', 'spec', 'disposition'],
+        hiddenAttributes: ['date', 'spec', 'disposition', 'direction', 'On Campus?'],
         googleMapsAPIKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? '',
         googleMapsAPIId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID ?? 'DEMO_MAP_ID',
         className: "!rounded-[25px] !px-0 !py-0 !drop-shadow-2xl max-h-[85vh]",

@@ -4,7 +4,7 @@ import 'meridian-ui/styles';
 import Menu from './Menu';
 import ReportGrid from './ReportGrid';
 import { useState, useEffect, useMemo } from 'react';
-import { getReportObjs, sortReports, filterReports } from '@/lib/utils';
+import { getReportObjs, sortReports, filterReports, formatReports } from '@/lib/utils';
 import { PDReport } from './ReportCard';
 import { MeridianWrapper, MeridianOverview } from 'meridian-ui';
 import { odi } from '@/lib/odi';
@@ -35,6 +35,10 @@ export default function ContentArea({ rdate }: { rdate: string }) {
         return sortReports(sortState, filteredArr);
     }, [sortState, filteredArr]);
 
+    const displayArr = useMemo<PDReport[]>(() => {
+        return formatReports(sortedArr);
+    }, [sortedArr]);
+
     const numEntries = sortedArr.length;
 
     return (
@@ -63,7 +67,7 @@ export default function ContentArea({ rdate }: { rdate: string }) {
 
                     // <ReportGrid reportArr={sortedArr} />
 
-                    <MeridianWrapper odi={odi} data={sortedArr}>                        
+                    <MeridianWrapper odi={odi} data={displayArr}>                        
                         <MeridianOverview/>
                     </MeridianWrapper>
                         
