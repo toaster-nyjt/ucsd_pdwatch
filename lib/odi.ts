@@ -6,7 +6,7 @@ export const odi : ODI = {
         binding: {
             itemId: '.id',
             internalAttributes: [
-                { id: 'lat', value: '.lat' },
+                { id: 'lat', value: '.lat' }, 
                 { id: 'lng', value: '.lng' },
             ],
             attributes: [
