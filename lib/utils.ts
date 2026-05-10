@@ -39,9 +39,34 @@ export async function getReportObjs(
         .gte('date', formatEndDate)
         .lte('date', formatStartDate);
 
+    const CAMPUS_LAT_MIN = 32.872123;
+    const CAMPUS_LAT_MAX = 32.890794;
+    const CAMPUS_LNG_MIN = -117.244530;
+    const CAMPUS_LNG_MAX = -117.231449;
+    const CENTER_LAT = 32.880511;
+    const CENTER_LNG = -117.240378;
+
     const filteredData = data!.map(
         ({ summary, time, date, disposition, location, category, id }) => {
             const coords = locationCoords[location ?? ''] ?? null;
+            const lat = coords?.lat ?? 32.8801;
+            const lng = coords?.lng ?? -117.2340;
+
+            const onCampus: 'On Campus' | 'Off Campus' =
+                lat >= CAMPUS_LAT_MIN &&
+                lat <= CAMPUS_LAT_MAX &&
+                lng >= CAMPUS_LNG_MIN &&
+                lng <= CAMPUS_LNG_MAX ? 'On Campus' : 'Off Campus';
+
+            const deltaLat = lat - CENTER_LAT;
+            const deltaLng = lng - CENTER_LNG;
+            const cardinalDirection: 'North' | 'South' | 'East' | 'West' =
+                Math.abs(deltaLat) >= Math.abs(deltaLng)
+                    ? deltaLat >= 0 ? 'North' : 'South'
+                    : deltaLng >= 0 ? 'East' : 'West';
+            const direction: 'North Side' | 'South Side' | 'East Side' | 'West Side' =
+                `${cardinalDirection} Side`;
+
             return {
                 id,
                 summary: summary ?? 'None',
@@ -50,8 +75,10 @@ export async function getReportObjs(
                 category: category ?? 'None given',
                 time: time ?? '00:00:00',
                 date: date ?? '1970/01/01',
-                lat: coords?.lat ?? 32.8801,
-                lng: coords?.lng ?? -117.2340,
+                lat,
+                lng,
+                onCampus,
+                direction,
             };
         }
     );

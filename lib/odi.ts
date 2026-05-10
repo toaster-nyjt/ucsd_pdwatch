@@ -14,6 +14,8 @@ export const odi : ODI = {
                 { id: 'location', value: '.location', roles:['key-attribute']},
                 { id: 'date', value: '.date', roles:['tag']},
                 { id: 'time', value: '.time', roles:['tag']},
+                { id: 'direction', value: '.direction', roles:['tag']},
+                { id: 'On Campus?', value: '.onCampus', roles:['tag']},
                 { id: 'summary', value: '.summary', roles:['description']},
                 { id: 'disposition', value: '.disposition', roles:['description']},
                 { id: 'id', value: '.id', roles:['spec']},
@@ -79,10 +81,10 @@ export const odi : ODI = {
     }],
     malleability: {
         content: {
-            types: ['toggle']
+            disabled: false
         },
         composition: {
-            types: ['tabs']
+            types: []
         },
         layout: {
             disabled: true

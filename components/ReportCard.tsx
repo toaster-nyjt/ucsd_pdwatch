@@ -8,6 +8,8 @@ type PDReport = {
     disposition: string;
     lat: number;
     lng: number;
+    onCampus: 'On Campus' | 'Off Campus';
+    direction: 'North Side' | 'South Side' | 'East Side' | 'West Side';
 };
 
 export type { PDReport };

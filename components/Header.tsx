@@ -29,7 +29,7 @@ export default function Header() {
                         Home
                     </span>
                 </Link>
-                <Link href="/">
+                <Link href="/about">
                     <span
                         className="cursor-pointer text-[25px] text-black/60 transition-colors hover:text-white/60"
                         style={{ fontFamily: 'Monofett, monospace' }}

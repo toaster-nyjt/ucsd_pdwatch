@@ -1,5 +1,6 @@
 'use client';
 
+import 'meridian-ui/styles';
 import Menu from './Menu';
 import ReportGrid from './ReportGrid';
 import { useState, useEffect, useMemo } from 'react';
