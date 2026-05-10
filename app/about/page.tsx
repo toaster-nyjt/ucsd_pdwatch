@@ -1,5 +1,11 @@
+import { Metadata } from 'next';
 import Header from '@/components/Header';
 import { getMostRecentDate } from '@/lib/constants';
+
+export const metadata: Metadata = {
+    title: 'About',
+    description: 'About PDWatch — a tool for exploring UCSD Police Department public incident data.',
+}
 
 export default async function AboutPage() {
     const date = await getMostRecentDate();
