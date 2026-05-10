@@ -17,7 +17,7 @@ export default async function AboutPage() {
                 <span>Hello!</span>
                 <p>
                     This is the tentative UCSD PD tracker page for user testing on Malleable ODIs. 
-                    This page was last updated on    
+                    Data was last updated on    
                     {" " + date}
                 </p>
             </div>
