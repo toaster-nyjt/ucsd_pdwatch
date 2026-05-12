@@ -10,16 +10,10 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-const typeIdMap = {
-    'card': 0,
-    'map' : 1,
-    'timeline' : 2
-}
-
-const IdTypeMap = {
-    '0': 'card',
-    '1': 'map',
-    '2': 'timeline'
+const map = {
+    "card": "0",
+    "map": "1",
+    "timeline": "2"
 }
 
 export default function ViewIsland({
@@ -31,18 +25,9 @@ export default function ViewIsland({
     searchState: string;
     setSearch: (arg0: string) => void;
 }) {
-    
+
     const { activeOverview, setActiveOverview } = useODI();
-
-    const activeLayout = IdTypeMap[activeOverview as keyof typeof IdTypeMap];
-
-    // useEffect(()=>{
-    //     setActiveOverview(`${typeIdMap[activeLayout]}`);
-    // }, [activeLayout]);
-   
-    const handleView = (view : 'card'|'timeline'|'map') => {
-        setActiveOverview(`${typeIdMap[view]}`);
-    };
+    const activeLayout = Object.keys(map).find((k)=>(map[k as keyof typeof map] === activeOverview));
 
     return (
         <div
@@ -99,7 +84,7 @@ export default function ViewIsland({
 
                 {/* Card View button */}
                 <button
-                    onClick={() => handleView('card')}
+                    onClick={() => setActiveOverview(map['card'])}
                     className={`flex items-center justify-between rounded-[10px] px-4.5 py-1.75 transition-all ${
                         activeLayout === 'card'
                             ? 'bg-white shadow-md'
@@ -141,7 +126,7 @@ export default function ViewIsland({
 
                 {/* Map View button */}
                 <button
-                    onClick={() => handleView('map')}
+                    onClick={() => setActiveOverview(map['map'])}
                     className={`flex items-center justify-between rounded-[10px] py-1.75 pr-6 pl-4.5 transition-all ${
                         activeLayout === 'map'
                             ? 'bg-white shadow-md'
@@ -170,7 +155,7 @@ export default function ViewIsland({
 
                 {/* Timeline View button */}
                 <button
-                    onClick={() => handleView('timeline')}
+                    onClick={() => setActiveOverview(map['timeline'])}
                     className={`flex items-center justify-between rounded-[10px] px-4.5 py-1.75 transition-all ${
                         activeLayout === 'timeline'
                             ? 'bg-white shadow-md'
