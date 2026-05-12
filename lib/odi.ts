@@ -84,7 +84,7 @@ export const odi : ODI = {
             disabled: false
         },
         composition: {
-            types: ["tabs"]
+            types: []
         },
         layout: {
             disabled: true
